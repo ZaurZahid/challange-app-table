@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Pagination from '../Pagination';
 import style from './data_sheet.module.css'
+import debounce from 'lodash.debounce';
+import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
 
 function index() {
 	const [search, setSearch] = useState('')
@@ -8,37 +10,59 @@ function index() {
 	const [order, setOrder] = useState('asc');
 	const [orderBy, setOrderBy] = useState('id'); // id-ye gore asc ele
 	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(20);
+	const [rowsPerPage] = useState(6);
 	const [isLoading, setIsLoading] = useState(false)
 
 	const table = [
 		{ id: 1, name: "1Zaur", surname: "Aliyev", date_birth: "01.03.2020", position: "Frontend developer", phonenumber: "554149211" },
-		{ id: 2, name: "1x", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 3, name: "2x", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 333, name: "2x", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 33, name: "3x", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 233, name: "3x", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 233, name: "4x", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 2, name: "1yx", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 3, name: "2xu3", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 4, name: "2eux", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 5, name: "2xg", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 6, name: "2grx", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 7, name: "3xg", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 8, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 9, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 10, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 11, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 12, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 13, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 14, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 15, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 16, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 17, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 18, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 19, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
+		{ id: 20, name: "4xh", surname: "y", date_birth: "01.03.2022", position: "Backend developer", phonenumber: "464524544" },
 	]
 
 	const [data, setData] = useState(table);
 	const [filteredData, setFilteredData] = useState(data);
 
+	const runAfterFinishTyping = useCallback(
+		debounce(searchVal => {
+
+			const clonedData = [...data]
+			const matches = clonedData.filter((element) =>
+				element.name.toLowerCase().includes(searchVal.trim())
+				|| element.surname.toLowerCase().includes(searchVal.trim())
+				|| element.date_birth.toLowerCase().includes(searchVal.trim())
+				|| element.position.toLowerCase().includes(searchVal.trim())
+				|| element.phonenumber.toLowerCase().includes(searchVal.trim())
+			)
+
+			setFilteredData(matches)
+			setPage(0)
+
+		}, 500),
+		[],
+	);
+
 	const handleSearch = (e) => {
-		const searchVal = e.target.value.toLowerCase()
-		setSearch(searchVal)
+		const value = e.target.value.toLowerCase()
+		setSearch(value)
 
-		const clonedData = [...data]
-		const matches = clonedData.filter((element) =>
-			element.name.toLowerCase().includes(searchVal.trim())
-			|| element.surname.toLowerCase().includes(searchVal.trim())
-			|| element.date_birth.toLowerCase().includes(searchVal.trim())
-			|| element.position.toLowerCase().includes(searchVal.trim())
-			|| element.phonenumber.toLowerCase().includes(searchVal.trim())
-		)
-
-		setFilteredData(matches)
-		setPage(0)
+		runAfterFinishTyping(value);
 	}
 
 	const tableHead = [
@@ -84,8 +108,8 @@ function index() {
 		setOrderBy(property);
 	};
 
-	const handleChangePage = (_, newPage) => {
-		setPage(newPage - 1);
+	const handleChangePage = (newPage) => {
+		setPage(newPage);
 	};
 
 	return (
@@ -129,7 +153,10 @@ function index() {
 						</th>
 						{tableHead.map(head =>
 							<th style={{ width: head.width }} key={head.id} onClick={(e) => handleSortRequest(e, head.id)}>
-								{head.label}
+								<span>
+									{head.label}
+									<i>	{orderBy === head.id ? (order === 'asc' ? < AiOutlineArrowDown /> : < AiOutlineArrowUp />) : null}</i>
+								</span>
 							</th>
 						)}
 					</tr>
@@ -162,13 +189,13 @@ function index() {
 				</div>
 			}
 
-			{filteredData &&
-				<div className={style.PaginationContainer}>
-					{/* <Pagination count={Math.ceil(filteredData.length / rowsPerPage)} activePage={page} setPage={setPage} /> */}
+			{filteredData && filteredData.length && filteredData.length > rowsPerPage &&
+				<div div className={style.PaginationContainer}>
+					<Pagination activePage={page} handleChangePage={handleChangePage} total={filteredData.length} perPage={rowsPerPage} />
 				</div>
 			}
 
-		</div>
+		</div >
 	)
 }
 
