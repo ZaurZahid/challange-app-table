@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import style from './snackbar.module.css'
+import ClickAwayListener from 'react-click-away-listener';
 
 function index({ alert, setAlert }) {
 
 	useEffect(() => {
 		const timeId = setTimeout(() => {
 			setAlert({ ...alert, open: false })
-		}, 1000)
+		}, 2500)
 
 		return () => clearTimeout(timeId)
 	}, [alert]);
@@ -16,12 +17,15 @@ function index({ alert, setAlert }) {
 
 		if (alert.open) {
 			content = (
-				<div
-					className={style.Snackbar}
-					style={{ backgroundColor: alert.bgC || "#04ff008c;" }}
-				>
-					<span>{alert.message}</span>
-				</div>
+				<ClickAwayListener onClickAway={() => setAlert({ ...alert, open: false })}>
+					<div
+						className={style.Snackbar}
+						style={{ backgroundColor: alert.bgC || "#04ff008c;" }}
+					>
+						<span>{alert.message}</span>
+					</div>
+				</ClickAwayListener>
+
 			)
 		}
 
