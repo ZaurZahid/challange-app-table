@@ -8,4 +8,85 @@
   overflow-y: auto;
 }
 
- 
+.BtnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.Submit {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 20px 50px;
+  background-color: #e0125e;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0px 20px 50px rgb(0 0 0 / 15%);
+}
+
+.Submit:hover {
+  color: #e0125e;
+  background-color: white;
+}
+
+.JsonData {
+  display: flex;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.UpdatedData,
+.DeletedData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  box-shadow: 0px 20px 50px rgb(0 0 0 / 15%);
+  border-radius: 14px;
+  padding: 50px;
+  /* border: 1px solid red; */
+}
+
+.UpdatedData {
+  margin-right: 50px;
+}
+
+.UpdatedData h5,
+.DeletedData h5 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+.UpdatedData h5 {
+  color: #f95000c2;
+}
+
+.DeletedData h5 {
+  color: #e0125e;
+}
+
+@media only screen and (max-width: 960px) {
+  .JsonData {
+    flex-direction: column;
+  }
+
+  .UpdatedData {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .UpdatedData,
+  .DeletedData {
+    width: 100%;
+    padding: 30px;
+  }
+  .UpdatedData h5,
+  .DeletedData h5 {
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 5px;
+  }
+}

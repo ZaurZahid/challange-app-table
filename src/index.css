@@ -159,3 +159,25 @@ input[type='checkbox'] {
   height: 17px;
   cursor: pointer;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 3px;
+  background-color: var(--layout-background-color);
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--layout-background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  background-color: var(--primary-background-color);
+}
+
+::-webkit-scrollbar:horizontal {
+  background-color: var(--primary-background-color);
+  width: 3px;
+}

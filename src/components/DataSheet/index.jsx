@@ -33,6 +33,7 @@ function index() {
 		phonenumber: ""
 	}
 	const [hasErr, setHasErr] = useState(initialErr);
+	const [viewJson, setViewJson] = useState(false);
 
 	const tableHead = [
 		{ id: "action", label: "Actions", sorting: false },
@@ -112,6 +113,7 @@ function index() {
 
 	const handleChangePage = (newPage) => {
 		setPage(newPage);
+		window.scrollTo({ top: 0, behavior: "smooth" })
 	};
 
 	const handleSortRequest = (_, property) => {
@@ -146,9 +148,9 @@ function index() {
 		if (JSON.stringify(clonedData[index]) === JSON.stringify(editingField)) {
 			// console.log('the same');
 			setAlert({
-				bgC: '#04ff008c',
+				bgC: 'rgb(255 129 0 / 69%)',
 				open: true,
-				message: 'Data is the same'
+				message: 'Values are the same'
 			})
 
 			handleBack()
@@ -243,6 +245,11 @@ function index() {
 		// console.log(editingField);
 	};
 
+	const viewJsonData = () => {
+		console.log('object');
+		setViewJson(true)
+	}
+
 	return (
 		<Loading isLoading={!data}>
 			<div className={style.DataSheet}>
@@ -267,12 +274,34 @@ function index() {
 						errObj={hasErr}
 					/>
 
+					<div className={style.BtnContainer}>
+						<button onClick={viewJsonData} className={style.Submit}>{viewJson ? "Hide" : "Submit"}</button>
+					</div>
+
+					{/* viewJson */ true &&
+						<div className={style.JsonData}>
+							<div className={style.UpdatedData}>
+								<h5>Updated data</h5>
+								<div>
+									asdasdasd
+								</div>
+							</div>
+							<div className={style.DeletedData}>
+								<h5>Deleted data</h5>
+								<div>
+									asdasdasd
+								</div>
+							</div>
+						</div>
+					}
+
 					{filteredData && filteredData.length && filteredData.length > rowsPerPage ?
 						<div className={style.PaginationContainer}>
 							<Pagination activePage={page} handleChangePage={handleChangePage} total={filteredData.length} perPage={rowsPerPage} />
 						</div>
 						: null
 					}
+
 				</Spinner>
 
 				<SnackBar alert={alert} setAlert={setAlert} />

@@ -95,12 +95,24 @@
   cursor: default;
 }
 
-.hasError {
-  border: 1px solid red;
-}
-
 .errMessage {
   color: red;
-  font-size: 9px;
+  font-size: 11px;
   padding-top: 4px;
+}
+
+.Input {
+  background-color: #ffffff;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  padding-left: 8px;
+  color: #565656;
+  height: 38px;
+  max-width: 100%;
+  box-shadow: none;
+  transition: all 0.3s linear;
+}
+
+.hasError {
+  border: 1px solid red;
 }
