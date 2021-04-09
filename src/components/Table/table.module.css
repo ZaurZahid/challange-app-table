@@ -1,0 +1,94 @@
+.TableContainer {
+  width: 100%;
+}
+
+.TableHead {
+  background-color: #ff337d4a;
+}
+
+.TableHead th {
+  font-weight: 600;
+  padding: 16px;
+  color: #ff337e;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.TableHead th span {
+  display: flex;
+}
+
+.TableHead th i {
+  display: flex;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.TableHead th span i svg {
+  margin-left: 4px;
+}
+
+.TableBody tr td {
+  padding: 16px;
+  color: #666666;
+  cursor: default;
+}
+
+.TableBody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.041);
+}
+
+.TableBody tr:hover {
+  background-color: rgba(0, 0, 0, 0.041);
+}
+
+.EditRow {
+  display: flex;
+  align-items: center;
+}
+
+.EditRow svg {
+  cursor: pointer;
+}
+
+.CheckIcon {
+  color: rgb(34, 177, 34);
+}
+
+.EditIcon,
+.BackIcon {
+  color: #e0125dc0;
+}
+
+.CheckIcon,
+.EditIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.BackIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 20px;
+}
+
+.NoData {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: default;
+}
+
+.hasError {
+  border: 1px solid red;
+}
+
+.errMessage {
+  color: red;
+  font-size: 9px;
+  padding-top: 4px;
+}

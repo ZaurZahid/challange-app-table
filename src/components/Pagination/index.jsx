@@ -20,7 +20,7 @@ const Pagination = ({ activePage, handleChangePage, total, perPage }) => {
 			<div className={style.paginationContent}>
 				{Array.apply(0, Array(count)).map((_, index) => {
 					if (count <= 10) {
-						return <button className={active === index && style.ActivePage} onClick={() => handleChangePage(index)}>{index + 1}</button>
+						return <button className={active === index ? style.ActivePage : null} onClick={() => handleChangePage(index)} key={index}>{index + 1}</button>
 					}
 					// console.log(index)
 					if (count > 10) {
@@ -29,13 +29,13 @@ const Pagination = ({ activePage, handleChangePage, total, perPage }) => {
 
 						if (min < 0) {
 							if (index < 8 || index > count - 3) {
-								return <button className={active === index && style.ActivePage} onClick={() => handleChangePage(index)}>{index + 1}</button>
+								return <button className={active === index ? style.ActivePage : null} onClick={() => handleChangePage(index)} key={index}>{index + 1}</button>
 							}
 						}
 
 						else if (min >= 0) {
 							if ((index > min || index + 10 > count) && (index < max) || index > count - 3) {
-								return <button className={active === index && style.ActivePage} onClick={() => handleChangePage(index)}>{index + 1}</button>
+								return <button className={active === index ? style.ActivePage : null} onClick={() => handleChangePage(index)} key={index}>{index + 1}</button>
 							}
 						}
 					}
