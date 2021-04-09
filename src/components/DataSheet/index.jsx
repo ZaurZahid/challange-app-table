@@ -32,6 +32,7 @@ function index() {
 		date_birth: "",
 		phonenumber: ""
 	}
+	
 	const [hasErr, setHasErr] = useState(initialErr);
 	const [viewJson, setViewJson] = useState(false);
 
@@ -148,7 +149,7 @@ function index() {
 		if (JSON.stringify(clonedData[index]) === JSON.stringify(editingField)) {
 			// console.log('the same');
 			setAlert({
-				bgC: 'rgb(255 129 0 / 69%)',
+				bgC: 'rgb(255 129 0)',
 				open: true,
 				message: 'Values are the same'
 			})
@@ -166,7 +167,7 @@ function index() {
 
 				handleBack()
 				setAlert({
-					bgC: '#04ff008c',
+					bgC: '#04ff00',
 					open: true,
 					message: 'Table updated'
 				})
@@ -194,7 +195,6 @@ function index() {
 			}, 500);
 		}
 	};
-
 
 	const validation = (id, name, value) => {
 		switch (name) {
@@ -250,6 +250,18 @@ function index() {
 		setViewJson(true)
 	}
 
+	const returnToInitialData = () => {
+		fetchData()
+
+		setAlert({
+			bgC: '#04ff00',
+			open: true,
+			message: 'Returned to initial value'
+		})
+	}
+
+
+
 	return (
 		<Loading isLoading={!data}>
 			<div className={style.DataSheet}>
@@ -276,6 +288,7 @@ function index() {
 
 					<div className={style.BtnContainer}>
 						<button onClick={viewJsonData} className={style.Submit}>{viewJson ? "Hide" : "Submit"}</button>
+						<button onClick={returnToInitialData} className={style.Initial}>Initial data</button>
 					</div>
 
 					{/* viewJson */ true &&

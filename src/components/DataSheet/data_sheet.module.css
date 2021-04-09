@@ -15,18 +15,32 @@
   margin-top: 40px;
 }
 
-.Submit {
+.BtnContainer button {
   font-size: 16px;
   font-weight: 600;
   padding: 20px 50px;
-  background-color: #e0125e;
-  color: white;
   border-radius: 12px;
   box-shadow: 0px 20px 50px rgb(0 0 0 / 15%);
 }
 
+.Submit {
+  background-color: #e0125e;
+  color: white;
+  margin-right: 40px;
+}
+
 .Submit:hover {
   color: #e0125e;
+  background-color: white;
+}
+
+.Initial {
+  background-color: #12e01c;
+  color: white;
+}
+
+.Initial:hover {
+  color: #12e01c;
   background-color: white;
 }
 
@@ -88,5 +102,14 @@
     font-size: 14px;
     line-height: 18px;
     margin-bottom: 5px;
+  }
+
+  .BtnContainer {
+    flex-direction: column;
+  }
+
+  .Submit {
+    margin-right: 0;
+    margin-bottom: 20px;
   }
 }
