@@ -22,6 +22,16 @@ function index() {
 	const [filteredData, setFilteredData] = useState(null);
 	const [editingField, setEditingField] = useState(null);
 
+	const initialErr = {
+		id: "",
+		name: "",
+		surname: "",
+		position: "",
+		date_birth: "",
+		phonenumber: ""
+	}
+	const [hasErr, setHasErr] = useState(initialErr);
+
 	const tableHead = [
 		{ id: "action", label: "Actions", sorting: false },
 		{ id: "id", label: "No", sorting: true },
@@ -69,12 +79,12 @@ function index() {
 			setFilteredData(table)
 
 			setIsLoading(false)
-		}, 1000);
+		}, 500);
 	}
 
 	const runAfterFinishTyping = useCallback(
 		debounce(searchVal => {
-			console.log(searchVal);
+			// console.log(searchVal);
 			const clonedData = [...data]
 			const matches = clonedData.filter((element) =>
 				element.name.toLowerCase().includes(searchVal.trim())
@@ -92,7 +102,7 @@ function index() {
 	);
 
 	const handleSearch = (e) => {
-		const value = e.target.value.toLowerCase()
+		let value = e.target.value && e.target.value.trim().toLowerCase()
 		setSearch(value)
 
 		runAfterFinishTyping(value);
@@ -109,6 +119,7 @@ function index() {
 		setOrderBy(property);
 	};
 
+
 	const handleEdit = (id) => {
 		setEditingRow(id)
 
@@ -119,7 +130,7 @@ function index() {
 			setEditingField(selectedField)
 		}
 	};
-
+ 
 	const handleSave = (id) => {
 		setIsLoading(true)
 
@@ -132,7 +143,7 @@ function index() {
 			setFilteredData(clonedData);
 
 			setEditingRow(null)
-
+			setHasErr(initialErr)
 			setIsLoading(false)
 		}, 500);
 	}
@@ -150,6 +161,7 @@ function index() {
 				setData(newData)
 				setFilteredData(newData)
 
+				setHasErr(initialErr)
 				setIsLoading(false)
 			}, 500);
 		}
@@ -157,20 +169,57 @@ function index() {
 
 	const handleBack = () => {
 		setEditingRow(null)
+		setHasErr(initialErr)
 		setEditingField(null)
 	};
+
+	const validation = (id, name, value) => {
+		switch (name) {
+			case 'name':
+			case 'surname':
+			case 'position':
+				if (value.trim().length === 0) {
+					setHasErr({ ...hasErr, ['id']: id, [name]: 'This field is required' })
+				} else {
+					setHasErr({ ...hasErr, [name]: '' })
+				}
+				break;
+
+			case 'date_birth':
+				break;
+
+			case 'phonenumber':
+				if (value.trim().length === 0) {
+					setHasErr({ ...hasErr, ['id']: id, [name]: 'This field is required' })
+				} else {
+					setHasErr({ ...hasErr, [name]: '' })
+					const patt = new RegExp(/\b\d{2}[-. ]?\d{3}[-. ]?\d{2}[-. ]?\d{2}\b/g);
+					const result = patt.test(value);
+
+					if (!result) {
+						setHasErr({ ...hasErr, ['id']: id, [name]: 'Phone number format error' })
+					} else {
+						setHasErr({ ...hasErr, [name]: '' })
+					}
+				}
+
+				break;
+			default:
+				break;
+		}
+	}
 
 	const handleChange = (e, id) => {
 		const nameOfField = e.target.name;
 		const valueOfField = e.target.value;
 
-		const clonedData = [...data]
-		let selectedField = clonedData.find(row => row.id === id)
-
-		if (Object.keys(selectedField).length !== 0) {
-			selectedField = { ...selectedField, [nameOfField]: valueOfField }
-			setEditingField(selectedField)
+		if (editingField) {
+			const newEditingData = { ...editingField, [nameOfField]: valueOfField }
+			setEditingField(newEditingData)
 		}
+
+		validation(id, nameOfField, valueOfField)
+		// console.log(editingField);
 	};
 
 	return (
@@ -194,6 +243,7 @@ function index() {
 						handleEdit={handleEdit}
 						handleChange={handleChange}
 						editingField={editingField}
+						errObj={hasErr}
 					/>
 
 					{filteredData && filteredData.length && filteredData.length > rowsPerPage ?

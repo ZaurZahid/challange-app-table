@@ -3,6 +3,7 @@ import style from './table.module.css'
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
 import { FiEdit, FiCheckSquare } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
+import { MoreThanEighteenYear } from '../utils';
 
 function index({
 	tableHead,
@@ -17,7 +18,8 @@ function index({
 	handleEdit,
 	handleChange,
 	filteredData,
-	editingField
+	editingField,
+	errObj
 }) {
 
 	function descendingComparator(a, b, orderBy) {
@@ -46,7 +48,7 @@ function index({
 		});
 		return stabilizedThis.map((el) => el[0]);
 	}
-
+	// console.log(errObj);
 	return (
 		<>
 			<table className={style.TableContainer}>
@@ -74,6 +76,14 @@ function index({
 						.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 						.map(el => {
 							const currenlyEditing = editingRow && editingRow === el.id
+							const errName = errObj.name && errObj.name.length > 0
+							const errSurName = errObj.surname && errObj.surname.length > 0
+							const errPosition = errObj.position && errObj.position.length > 0
+							const errPhoneNumber = errObj.phonenumber && errObj.phonenumber.length > 0
+							const errBirthday = errObj.date_birth && errObj.date_birth.length > 0
+
+							const { id, ...rest } = errObj
+							const disableBtn = Object.values(rest).some(x => (x !== ''));
 
 							return (
 								<tr key={el.id}>
@@ -87,54 +97,54 @@ function index({
 									<td className={style.EditRow}>
 										{currenlyEditing ?
 											<>
-												<GrClose onClick={handleBack} className={style.BackIcon} />
-												<FiCheckSquare onClick={() => handleSave(el.id)} className={style.CheckIcon} />
+												<button><GrClose onClick={handleBack} className={style.BackIcon} /></button>
+												<button disabled={disableBtn}><FiCheckSquare onClick={() => disableBtn ? undefined : handleSave(el.id)} className={disableBtn ? style.Disabled : style.CheckIcon} /></button>
 											</>
-											: <FiEdit onClick={() => handleEdit(el.id)} className={style.EditIcon} />}
+											: editingRow ? null : <FiEdit onClick={() => handleEdit(el.id)} className={style.EditIcon} />}
 									</td>
 									<td>{el.id}</td>
 
-									<td className={true ? style.hasError : null}>
+									<td className={errName && errObj.id === el.id ? style.hasError : null}>
 										{currenlyEditing ?
 											<>
-												<input type="text" name="name" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.name} />
-												{true && <p className={style.errMessage}>*Name required</p>}
+												<input type="text" name="name" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.name} placeholder="Type name" />
+												{errName && errObj.id === el.id && <p className={style.errMessage}>*{errObj.name}</p>}
 											</>
 											: el.name
 										}
 									</td>
-									<td className={true ? style.hasError : null}>
+									<td className={errSurName && errObj.id === el.id ? style.hasError : null}>
 										{currenlyEditing ?
 											<>
-												<input type="text" name="surname" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.surname} />
-												{true && <p className={style.errMessage}>*Surname required</p>}
+												<input type="text" name="surname" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.surname} placeholder="Type surname" />
+												{errSurName && errObj.id === el.id && <p className={style.errMessage}>*{errObj.surname}</p>}
 											</>
 											: el.surname
 										}
 									</td>
-									<td className={true ? style.hasError : null}>
+									<td className={errBirthday && errObj.id === el.id ? style.hasError : null}>
 										{currenlyEditing ?
 											<>
-												<input type="text" name="date_birth" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.date_birth} />
-												{true && <p className={style.errMessage}>*Birthday format error</p>}
+												<input type="date" name="date_birth" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.date_birth} max={MoreThanEighteenYear()} onKeyDown={(e) => e.preventDefault()} />
+												{errBirthday && errObj.id === el.id && <p className={style.errMessage}>*{errObj.date_birth}</p>}
 											</>
 											: el.date_birth
 										}
-									</td> 
-									<td className={true ? style.hasError : null}>
+									</td>
+									<td className={errPosition && errObj.id === el.id ? style.hasError : null}>
 										{currenlyEditing ?
 											<>
-												<input type="text" name="position" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.position} />
-												{true && <p className={style.errMessage}>*Position required</p>}
+												<input type="text" name="position" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.position} placeholder="Type position" />
+												{errPosition && errObj.id === el.id && <p className={style.errMessage}>*{errObj.position}</p>}
 											</>
 											: el.position
 										}
 									</td>
-									<td className={true ? style.hasError : null}>
+									<td className={errPhoneNumber && errObj.id === el.id ? style.hasError : null}>
 										{currenlyEditing ?
 											<>
-												<input type="text" name="phonenumber" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.phonenumber} />
-												{true && <p className={style.errMessage}>* Phone number format error{/* Phonenumber required */}</p>}
+												<input type="text" name="phonenumber" onChange={(e) => handleChange(e, el.id)} value={editingField && editingField.phonenumber} placeholder="xx xxx xx xx" />
+												{errPhoneNumber && errObj.id === el.id && <p className={style.errMessage}>*{errObj.phonenumber}</p>}
 											</>
 											: el.phonenumber
 										}

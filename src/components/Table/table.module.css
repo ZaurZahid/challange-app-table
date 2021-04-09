@@ -52,6 +52,18 @@
   cursor: pointer;
 }
 
+.EditRow button {
+  background-color: transparent;
+}
+
+.EditRow button:first-child {
+  margin-right: 20px;
+}
+
+.Disabled {
+  color: grey;
+}
+
 .CheckIcon {
   color: rgb(34, 177, 34);
 }
@@ -62,7 +74,8 @@
 }
 
 .CheckIcon,
-.EditIcon {
+.EditIcon,
+.Disabled {
   width: 20px;
   height: 20px;
 }
@@ -70,7 +83,6 @@
 .BackIcon {
   width: 18px;
   height: 18px;
-  margin-right: 20px;
 }
 
 .NoData {
