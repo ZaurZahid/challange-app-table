@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Pagination from '../Pagination';
+import SnackBar from '../SnackBar';
 import TopSection from '../TopSection';
 import Toolbar from '../Toolbar';
 import Table from '../Table';
@@ -21,6 +22,7 @@ function index() {
 	const [data, setData] = useState(null);
 	const [filteredData, setFilteredData] = useState(null);
 	const [editingField, setEditingField] = useState(null);
+	const [alert, setAlert] = useState({ open: false, message: '', bgC: "" })
 
 	const initialErr = {
 		id: "",
@@ -119,6 +121,11 @@ function index() {
 		setOrderBy(property);
 	};
 
+	const handleBack = () => {
+		setEditingRow(null)
+		setHasErr(initialErr)
+		setEditingField(null)
+	};
 
 	const handleEdit = (id) => {
 		setEditingRow(id)
@@ -130,22 +137,41 @@ function index() {
 			setEditingField(selectedField)
 		}
 	};
- 
+
 	const handleSave = (id) => {
-		setIsLoading(true)
+		const clonedData = [...data]
+		const index = clonedData.findIndex(row => row.id === id)
 
-		//API REQUEST
-		setTimeout(() => {
-			const clonedData = [...data]
-			const index = clonedData.findIndex(row => row.id === id)
-			clonedData[index] = editingField;
-			setData(clonedData);
-			setFilteredData(clonedData);
+		//clonedData[index] (old) editingField (new edited object) bir birinden ferqli olarsa 
+		if (JSON.stringify(clonedData[index]) === JSON.stringify(editingField)) {
+			// console.log('the same');
+			setAlert({
+				bgC: '#04ff008c',
+				open: true,
+				message: 'Data is the same'
+			})
 
-			setEditingRow(null)
-			setHasErr(initialErr)
-			setIsLoading(false)
-		}, 500);
+			handleBack()
+		} else {
+			// console.log('different');
+			setIsLoading(true)
+
+			//API REQUEST
+			setTimeout(() => {
+				clonedData[index] = editingField;
+				setData(clonedData);
+				setFilteredData(clonedData);
+
+				handleBack()
+				setAlert({
+					bgC: '#04ff008c',
+					open: true,
+					message: 'Table updated'
+				})
+
+				setIsLoading(false)
+			}, 500);
+		}
 	}
 
 	const handleDelete = (id) => {
@@ -167,11 +193,6 @@ function index() {
 		}
 	};
 
-	const handleBack = () => {
-		setEditingRow(null)
-		setHasErr(initialErr)
-		setEditingField(null)
-	};
 
 	const validation = (id, name, value) => {
 		switch (name) {
@@ -253,6 +274,8 @@ function index() {
 						: null
 					}
 				</Spinner>
+
+				<SnackBar alert={alert} setAlert={setAlert} />
 			</div>
 		</Loading>
 	)

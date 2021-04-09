@@ -19,7 +19,7 @@ function index({
 	handleChange,
 	filteredData,
 	editingField,
-	errObj
+	errObj,
 }) {
 
 	function descendingComparator(a, b, orderBy) {
@@ -83,7 +83,7 @@ function index({
 							const errBirthday = errObj.date_birth && errObj.date_birth.length > 0
 
 							const { id, ...rest } = errObj
-							const disableBtn = Object.values(rest).some(x => (x !== ''));
+							const disableBtn = Object.values(rest).some(x => (x !== ''))
 
 							return (
 								<tr key={el.id}>

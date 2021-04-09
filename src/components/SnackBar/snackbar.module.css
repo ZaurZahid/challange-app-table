@@ -1,0 +1,17 @@
+.Snackbar {
+  width: 200px;
+  padding: 20px;
+  position: fixed;
+  top: 5%;
+  right: 2%;
+  border-radius: 19px;
+
+  display: flex;
+  justify-content: center;
+  box-shadow: 0px 20px 50px rgb(0 0 0 / 15%);
+}
+
+.Snackbar span {
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+}
