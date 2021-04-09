@@ -9,8 +9,7 @@
 
 :root {
   --primary-background-color: #cd1659;
-  --layout-background-color: #ebeff2;
-  --scroll-color: #d3658d;
+  --scroll-background-color: #ebeff2;
 }
 
 html,
@@ -163,11 +162,11 @@ input[type='checkbox'] {
 ::-webkit-scrollbar {
   width: 5px;
   height: 3px;
-  background-color: var(--layout-background-color);
+  background-color: var(--scroll-background-color);
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--layout-background-color);
+  background-color: var(--scroll-background-color);
 }
 
 ::-webkit-scrollbar-thumb {

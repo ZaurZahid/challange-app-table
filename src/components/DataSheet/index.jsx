@@ -8,6 +8,9 @@ import style from './data_sheet.module.css'
 import debounce from 'lodash.debounce';
 import Loading from '../Loading';
 import Spinner from '../Spinner';
+import UpdatedData from '../UpdatedData';
+import { updatedDiff } from 'deep-object-diff';
+import { generateArray } from '../utils';
 
 function index() {
 	const [search, setSearch] = useState('')
@@ -15,12 +18,13 @@ function index() {
 	const [order, setOrder] = useState('asc');
 	const [orderBy, setOrderBy] = useState('id'); // ilk once id ye gore asc ele
 	const [page, setPage] = useState(0);
-	const [rowsPerPage] = useState(6);
+	const [rowsPerPage] = useState(6/* 10 */);
 	const [isLoading, setIsLoading] = useState(false)
 	const [editingRow, setEditingRow] = useState(null)
 
 	const [data, setData] = useState(null);
 	const [filteredData, setFilteredData] = useState(null);
+	const [unChangedData, setUnChangedData] = useState(null);
 	const [editingField, setEditingField] = useState(null);
 	const [alert, setAlert] = useState({ open: false, message: '', bgC: "" })
 
@@ -32,9 +36,10 @@ function index() {
 		date_birth: "",
 		phonenumber: ""
 	}
-	
+
 	const [hasErr, setHasErr] = useState(initialErr);
 	const [viewJson, setViewJson] = useState(false);
+	const [updatedData, setUpdatedData] = useState([]);
 
 	const tableHead = [
 		{ id: "action", label: "Actions", sorting: false },
@@ -44,29 +49,6 @@ function index() {
 		{ id: "date_birth", label: "Date birth", sorting: true },
 		{ id: "position", label: "Position", sorting: true },
 		{ id: "phonenumber", label: "Phone number", sorting: true },
-	]
-
-	const table = [
-		{ id: 1, name: "1Zaur", surname: "Aliyev Frontend developer Frontend developer", date_birth: "2021-04-14", position: "Frontend developer", phonenumber: "554149211" },
-		{ id: 2, name: "1yx", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 3, name: "2xu3", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 4, name: "2eux", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 5, name: "2xg", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 6, name: "2grx", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 7, name: "3xg", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 8, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 9, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 10, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 11, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 12, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 13, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 14, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 15, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 16, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 17, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 18, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 19, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
-		{ id: 20, name: "4xh", surname: "y", date_birth: "2021-04-14", position: "Backend developer", phonenumber: "464524544" },
 	]
 
 	useEffect(() => {
@@ -79,8 +61,10 @@ function index() {
 		//if ok
 
 		setTimeout(() => {
-			setData(table)
-			setFilteredData(table)
+			const tableData = generateArray()
+			setData(tableData)
+			setFilteredData(tableData)
+			setUnChangedData(tableData)
 
 			setIsLoading(false)
 		}, 500);
@@ -141,6 +125,38 @@ function index() {
 		}
 	};
 
+	const handleUpdatedData = (index, editingField) => {
+		const clonedData = [...unChangedData]
+		const updatedValues = []
+		const diff = updatedDiff(clonedData[index], editingField)
+		console.log(diff);
+
+		if ((Object.keys(diff).length !== 0)) {
+			for (const [key, value] of Object.entries(diff)) {
+				updatedValues.push(
+					{
+						nameofField: key,
+						valuesOfField: {
+							oldVal: clonedData[index][key],
+							newVal: value
+						}
+					}
+				)
+			}
+
+			const withUpdated = { ...clonedData[index], updatedValues }
+			const newUpdatedData = [...updatedData, withUpdated]
+			const uniqueData = [...newUpdatedData.reduce((map, obj) => map.set(obj.id, obj), new Map()).values()];
+
+			setUpdatedData(uniqueData)
+		} else {
+			const newUpdatedData = updatedData.filter(el => el.id !== editingField.id)
+			setUpdatedData(newUpdatedData)
+
+			// console.log('ferq evvelki ile yoxdu');
+		}
+	}
+
 	const handleSave = (id) => {
 		const clonedData = [...data]
 		const index = clonedData.findIndex(row => row.id === id)
@@ -161,6 +177,9 @@ function index() {
 
 			//API REQUEST
 			setTimeout(() => {
+				//bir bir push ele 
+				handleUpdatedData(index, editingField)
+
 				clonedData[index] = editingField;
 				setData(clonedData);
 				setFilteredData(clonedData);
@@ -246,11 +265,12 @@ function index() {
 	};
 
 	const viewJsonData = () => {
-		console.log('object');
-		setViewJson(true)
+		setViewJson(prev => !prev)
 	}
 
 	const returnToInitialData = () => {
+		setViewJson(false)
+		setUpdatedData([])
 		fetchData()
 
 		setAlert({
@@ -259,8 +279,6 @@ function index() {
 			message: 'Returned to initial value'
 		})
 	}
-
-
 
 	return (
 		<Loading isLoading={!data}>
@@ -287,7 +305,7 @@ function index() {
 					/>
 
 					<div className={style.BtnContainer}>
-						<button onClick={viewJsonData} className={style.Submit}>{viewJson ? "Hide" : "Submit"}</button>
+						<button onClick={viewJsonData} className={style.Submit}>{viewJson ? "Hide" : "View"}</button>
 						<button onClick={returnToInitialData} className={style.Initial}>Initial data</button>
 					</div>
 
@@ -295,9 +313,7 @@ function index() {
 						<div className={style.JsonData}>
 							<div className={style.UpdatedData}>
 								<h5>Updated data</h5>
-								<div>
-									asdasdasd
-								</div>
+								<UpdatedData data={updatedData} />
 							</div>
 							<div className={style.DeletedData}>
 								<h5>Deleted data</h5>

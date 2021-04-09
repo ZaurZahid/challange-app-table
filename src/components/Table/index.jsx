@@ -3,7 +3,7 @@ import style from './table.module.css'
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
 import { FiEdit, FiCheckSquare } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
-import { MoreThanEighteenYear } from '../utils';
+import { getComparator, MoreThanEighteenYear, tableSort } from '../utils';
 
 function index({
 	tableHead,
@@ -22,32 +22,6 @@ function index({
 	errObj,
 }) {
 
-	function descendingComparator(a, b, orderBy) {
-		if (b[orderBy] < a[orderBy]) {
-			return -1;
-		}
-		if (b[orderBy] > a[orderBy]) {
-			return 1;
-		}
-		return 0;
-	}
-
-	function getComparator(order, orderBy) {
-		return order === 'desc'
-			? (a, b) => descendingComparator(a, b, orderBy)
-			: (a, b) => -descendingComparator(a, b, orderBy);
-	}
-
-	//sorting array
-	function tableSort(array, comparator) {
-		const stabilizedThis = array.map((el, index) => [el, index]);
-		stabilizedThis.sort((a, b) => {
-			const order = comparator(a[0], b[0]);
-			if (order !== 0) return order;
-			return a[1] - b[1];
-		});
-		return stabilizedThis.map((el) => el[0]);
-	}
 	// console.log(errObj);
 	return (
 		<>

@@ -1,6 +1,6 @@
 .Container {
   display: flex;
   justify-content: center;
-  background-color: rgb(255, 255, 255);
+  background-color: #ff337e70;
   min-height: 100vh;
 }

@@ -1,0 +1,11 @@
+.Section {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px dashed #666666;
+}
+
+.Section pre {
+  font-size: 16px;
+  font-weight: 600;
+  color: #666666;
+}

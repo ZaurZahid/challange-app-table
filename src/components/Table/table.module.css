@@ -116,3 +116,16 @@
 .hasError {
   border: 1px solid red;
 }
+
+@media only screen and (max-width: 960px) {
+  .TableContainer {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    white-space: nowrap;
+  }
+
+  .TableContainer .TableBody {
+    width: 100%;
+  }
+}
