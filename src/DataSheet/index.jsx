@@ -13,22 +13,8 @@ import DeletedData from '../DeletedData';
 import { updatedDiff } from 'deep-object-diff';
 import { generateArray } from '../../components/utils';
 
-/* export const getStaticProps = async () => {
-	const staticTable = generateArray()
+function index({ staticData }) {
 
-	return {
-		props: {
-			table: [
-				{
-					id: 1, name: "ad"
-				}
-			]
-		}, // will be passed to the page component as props
-	}
-} */
-
-function index({ table }) {
-	console.log(table);
 	const [search, setSearch] = useState('')
 	const [numSelected, setNumSelected] = useState([])
 	const [order, setOrder] = useState('asc');
@@ -79,10 +65,9 @@ function index({ table }) {
 		//if ok
 
 		setTimeout(() => {
-			const tableData = generateArray()
-			setData(tableData)
-			setFilteredData(tableData)
-			setUnChangedData(tableData)
+			setData(staticData)
+			setFilteredData(staticData)
+			setUnChangedData(staticData)
 
 			setIsLoading(false)
 		}, 500);

@@ -24,6 +24,8 @@ export const generateArray = () => {
 	return Table
 }
 
+export const staticData = generateArray()
+
 export function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
 		return -1;
