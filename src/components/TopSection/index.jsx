@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './top_section.module.css'
 
-function index({ text, search, handleSearch, filteredData, data }) {
+function index({ text, search, handleSearch, filteredData, data, undo }) {
 	return (
 		<>
 			<div className={style.TopSection}>

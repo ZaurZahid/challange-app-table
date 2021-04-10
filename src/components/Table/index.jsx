@@ -20,6 +20,10 @@ function index({
 	filteredData,
 	editingField,
 	errObj,
+	selectClick,
+	numSelected,
+	selectClickAll,
+	undo
 }) {
 
 	// console.log(errObj);
@@ -28,12 +32,16 @@ function index({
 			<table className={style.TableContainer}>
 				<thead className={style.TableHead}>
 					<tr>
+
 						<th>
-							<input
-								type="checkbox"
-							// checked={rowCount > 0 && numSelected === rowCount}
-							// onChange={onSelectAllClick}
-							/>
+							{filteredData && filteredData.length > 0 &&
+								<input
+									type="checkbox"
+									onChange={(e) => selectClickAll(e.target.checked)}
+									checked={numSelected.length === filteredData.length}
+									disabled={editingRow}
+								/>
+							}
 						</th>
 						{tableHead && tableHead.map(head =>
 							<th style={{ width: head.width }} key={head.id} onClick={(e) => head.sorting ? handleSortRequest(e, head.id) : e.preventDefault()}>
@@ -64,8 +72,9 @@ function index({
 									<td>
 										<input
 											type="checkbox"
-										// checked={rowCount > 0 && numSelected === rowCount}
-										// onChange={onSelectAllClick}
+											onChange={(e) => selectClick(e.target.checked, +el.id)}
+											checked={numSelected.find(x => x === +el.id) ? true : false}
+											disabled={editingRow}
 										/>
 									</td>
 									<td className={style.EditRow}>

@@ -5,6 +5,14 @@
   padding: 10px;
   background-color: #ff337d4a;
   border-bottom: 1px solid #e0125e;
+
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.ToolbarUndo {
+  background-color: #e3e3e3;
+  border: 1px solid #e3e3e3;
 }
 
 .Toolbar .SelectedCount {
@@ -29,4 +37,17 @@
 
 .Toolbar .DeleteBtn:hover {
   background-color: #e0125dc0;
+}
+
+.Toolbar .UndoBtn {
+  background-color: #23e012;
+  margin-right: 20px;
+}
+
+.Toolbar .UndoBtn:hover {
+  background-color: #23e012af;
+}
+
+.BtnContainer {
+  display: flex;
 }

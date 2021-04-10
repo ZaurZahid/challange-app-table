@@ -11,21 +11,24 @@ import Spinner from '../Spinner';
 import UpdatedData from '../UpdatedData';
 import { updatedDiff } from 'deep-object-diff';
 import { generateArray } from '../utils';
+import { AiOutlineDeleteRow } from 'react-icons/ai';
 
 function index() {
 	const [search, setSearch] = useState('')
-	const [numSelected] = useState(0)
+	const [numSelected, setNumSelected] = useState([])
 	const [order, setOrder] = useState('asc');
 	const [orderBy, setOrderBy] = useState('id'); // ilk once id ye gore asc ele
 	const [page, setPage] = useState(0);
 	const [rowsPerPage] = useState(6/* 10 */);
 	const [isLoading, setIsLoading] = useState(false)
+	const [undo, setUndo] = useState(false)
 	const [editingRow, setEditingRow] = useState(null)
 
 	const [data, setData] = useState(null);
 	const [filteredData, setFilteredData] = useState(null);
 	const [unChangedData, setUnChangedData] = useState(null);
 	const [editingField, setEditingField] = useState(null);
+	const [deletedData, setDeletedData] = useState([]);
 	const [alert, setAlert] = useState({ open: false, message: '', bgC: "" })
 
 	const initialErr = {
@@ -90,7 +93,7 @@ function index() {
 	);
 
 	const handleSearch = (e) => {
-		let value = e.target.value && e.target.value.trim().toLowerCase()
+		let value = e.target.value && e.target.value.toLowerCase()
 		setSearch(value)
 
 		runAfterFinishTyping(value);
@@ -183,6 +186,7 @@ function index() {
 				clonedData[index] = editingField;
 				setData(clonedData);
 				setFilteredData(clonedData);
+				setSearch('')
 
 				handleBack()
 				setAlert({
@@ -195,25 +199,6 @@ function index() {
 			}, 500);
 		}
 	}
-
-	const handleDelete = (id) => {
-		if (confirm("Silmək istədiyinizə əminsinizmi?")) {
-			setIsLoading(true)
-
-			// API REQUEST
-			// if ok
-			// time out api sorgusu getmek ucundur
-			setTimeout(() => {
-				const clonedData = [...data]
-				const newData = clonedData.filter(el => el.id !== id)
-				setData(newData)
-				setFilteredData(newData)
-
-				setHasErr(initialErr)
-				setIsLoading(false)
-			}, 500);
-		}
-	};
 
 	const validation = (id, name, value) => {
 		switch (name) {
@@ -271,6 +256,9 @@ function index() {
 	const returnToInitialData = () => {
 		setViewJson(false)
 		setUpdatedData([])
+		setDeletedData([])
+		setNumSelected([])
+		setPage(0)
 		fetchData()
 
 		setAlert({
@@ -280,12 +268,106 @@ function index() {
 		})
 	}
 
+	const handleDeleteTemporary = () => {
+		let clonedData = [...unChangedData]
+		let numSelectedAll = [...numSelected]
+
+		if (deletedData && deletedData.length > 0) {
+			numSelectedAll = deletedData.map(el => [...numSelectedAll, el.id])[0]
+			numSelectedAll = numSelectedAll.sort((a, b) => (a > b) ? 1 : -1)
+		}
+
+		const newData = clonedData.filter((el) => numSelectedAll.indexOf(el.id) === -1)
+		setFilteredData(newData)
+		setSearch('')
+
+		setIsLoading(true)
+		handleBack()
+		setUndo(true)
+
+	};
+
+/* 	const differWithUpdatedData = (deleted, updated) => {
+		const newData = updated.filter((el) => deleted.indexOf(el.id) === -1)
+		console.log(newData);
+
+		console.log(deleted);
+		console.log(updated);
+	}
+ */
+	const onDeletePermanently = () => {
+		// if (confirm("Silmək istədiyinizə əminsinizmi?")) {
+
+		// API REQUEST
+		// if ok
+		// time out api sorgusu getmek ucundur
+
+		setTimeout(() => {
+			const clonedData = [...data]
+			const newData = clonedData.filter((el) => numSelected.indexOf(el.id) === -1)
+			let newDeletedData = clonedData.filter((el) => numSelected.indexOf(el.id) !== -1)
+
+			setFilteredData(newData)
+			setData(newData)
+
+			const newAllDeletedData = [...deletedData, ...newDeletedData]
+			setDeletedData(newAllDeletedData)
+			differWithUpdatedData(newAllDeletedData, updatedData)
+
+			handleBack()
+			setNumSelected([])
+			setUndo(false)
+
+			setAlert({
+				bgC: '#e0125e',
+				open: true,
+				message: 'Selected data deleted'
+			})
+
+			setIsLoading(false)
+		}, 500);
+	}
+	// };
+
+	const unDo = () => {
+
+	};
+
+	const selectClick = (ckd, id) => {
+		let newData = [...numSelected]
+
+		if (ckd) {
+			// evvel add olunmayibsa
+			newData = [...newData, id]
+			newData = newData.sort((a, b) => (a > b) ? 1 : -1)
+		} else {
+			newData = newData.filter(el => el !== id)
+		}
+
+		setNumSelected(newData)
+	}
+
+	const selectClickAll = (ckd) => {
+		let newData = []
+		let clonedData = [...filteredData]
+
+		if (ckd) {
+			newData = clonedData.map(el => el.id)
+			console.log(newData);
+			setNumSelected(newData)
+		} else {
+			setNumSelected([])
+		}
+	}
+
 	return (
 		<Loading isLoading={!data}>
 			<div className={style.DataSheet}>
+				<Toolbar numSelected={numSelected} onDeletePermanently={onDeletePermanently} undo={undo} unDo={unDo} toolbarOpen={undo} />
+
 				<Spinner isLoading={isLoading}>
-					<TopSection text={"List of Employees"} search={search} handleSearch={handleSearch} filteredData={filteredData} data={data} />
-					<Toolbar numSelected={numSelected} onDelete={handleDelete} />
+					<TopSection text={"List of Employees"} search={search} handleSearch={handleSearch} filteredData={filteredData} data={data} undo={undo} />
+					<Toolbar numSelected={numSelected} onDeleteTemporary={handleDeleteTemporary} toolbarOpen={!undo && !editingRow} />
 					{/* Form elave ederik. */}
 					<Table
 						tableHead={tableHead}
@@ -302,6 +384,10 @@ function index() {
 						handleChange={handleChange}
 						editingField={editingField}
 						errObj={hasErr}
+						selectClick={selectClick}
+						numSelected={numSelected}
+						selectClickAll={selectClickAll}
+						undo={undo}
 					/>
 
 					<div className={style.BtnContainer}>
