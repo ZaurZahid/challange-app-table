@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import style from './table.module.css'
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
 import { FiEdit, FiCheckSquare } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
-import { getComparator, MoreThanEighteenYear, tableSort } from '../utils';
+import { getComparator, MoreThanEighteenYear, tableSort } from '../../components/utils';
 
 function index({
 	tableHead,
