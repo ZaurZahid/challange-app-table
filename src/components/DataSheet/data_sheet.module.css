@@ -24,23 +24,23 @@
 }
 
 .Submit {
-  background-color: #e0125e;
+  background-color: var(--primary-color);
   color: white;
   margin-right: 40px;
 }
 
 .Submit:hover {
-  color: #e0125e;
+  color: var(--primary-color);
   background-color: white;
 }
 
 .Initial {
-  background-color: #12e01c;
+  background-color: var(--light-green-color);
   color: white;
 }
 
 .Initial:hover {
-  color: #12e01c;
+  color: var(--light-green-color);
   background-color: white;
 }
 
@@ -58,6 +58,8 @@
   box-shadow: 0px 20px 50px rgb(0 0 0 / 15%);
   border-radius: 14px;
   padding: 50px;
+  height: 450px;
+  overflow: auto;
   /* border: 1px solid red; */
 }
 
@@ -78,7 +80,7 @@
 }
 
 .DeletedData h5 {
-  color: #e0125e;
+  color: var(--primary-color);
 }
 
 @media only screen and (max-width: 960px) {
@@ -88,14 +90,16 @@
 
   .UpdatedData {
     margin-right: 0;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .UpdatedData,
   .DeletedData {
     width: 100%;
     padding: 30px;
+    height: 300px;
   }
+
   .UpdatedData h5,
   .DeletedData h5 {
     font-size: 14px;

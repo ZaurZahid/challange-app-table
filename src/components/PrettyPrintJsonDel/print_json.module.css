@@ -1,11 +1,11 @@
 .Section {
   margin-bottom: 30px;
   padding-bottom: 30px;
-  border-bottom: 1px dashed #666666;
+  border-bottom: 1px dashed var(--light-gray-color);
 }
 
 .Section pre {
   font-size: 16px;
   font-weight: 600;
-  color: #666666;
+  color: var(--light-gray-color);
 }

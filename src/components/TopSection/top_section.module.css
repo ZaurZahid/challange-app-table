@@ -1,10 +1,9 @@
-
 .TopSection {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 25px;
-  color: #565656;
+  color: var(--light-gray-color);
 }
 
 .TopSection div:first-child {
@@ -21,7 +20,7 @@
   border: 1px solid #e3e3e3;
   border-radius: 4px;
   padding-left: 8px;
-  color: #565656;
+  color: var(--light-gray-color);
   height: 38px;
   max-width: 100%;
   box-shadow: none;

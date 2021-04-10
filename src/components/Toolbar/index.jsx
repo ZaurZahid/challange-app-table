@@ -46,7 +46,7 @@ function index({ numSelected, onDeleteTemporary, onDeletePermanently, unDo, undo
 
 						<div>
 							<button className={style.DeleteBtn} onClick={onDeleteTemporary}>
-								Delete
+								Confirm
 							</button>
 						</div>
 					</div>

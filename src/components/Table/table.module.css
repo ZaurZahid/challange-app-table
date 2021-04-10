@@ -3,13 +3,13 @@
 }
 
 .TableHead {
-  background-color: #ff337d4a;
+  background-color: var(--blurred-purple-color);
 }
 
 .TableHead th {
   font-weight: 600;
   padding: 16px;
-  color: #ff337e;
+  color: var(--light-purple-color);
   text-align: inherit;
   cursor: pointer;
 }
@@ -31,7 +31,7 @@
 
 .TableBody tr td {
   padding: 16px;
-  color: #666666;
+  color: var(--light-gray-color);
   cursor: default;
 }
 
@@ -65,12 +65,12 @@
 }
 
 .CheckIcon {
-  color: rgb(34, 177, 34);
+  color: var(--light-green-color);
 }
 
 .EditIcon,
 .BackIcon {
-  color: #e0125dc0;
+  color: var(--light-purple-color);
 }
 
 .CheckIcon,

@@ -268,7 +268,7 @@ function index() {
 		fetchData()
 
 		setAlert({
-			bgC: '#04ff00',
+			bgC: 'var(--light-green-color)',
 			open: true,
 			message: 'Returned to initial value'
 		})
@@ -303,7 +303,7 @@ function index() {
 		deleted.map(el => deletedIds.push(el.id))
 
 		const newData = updated.filter((el) => deletedIds.indexOf(el.id) === -1)
-		console.log(newData);
+		// console.log(newData);
 		setUpdatedData(newData)
 	}
 
@@ -332,7 +332,7 @@ function index() {
 			setUndo(false)
 			setPage(0)
 			setAlert({
-				bgC: '#e0125e',
+				bgC: 'var(--primary-color)',
 				open: true,
 				message: 'Selected data deleted'
 			})
@@ -343,8 +343,8 @@ function index() {
 	// };
 
 	const unDo = () => {
-		console.log(filteredData);
-		console.log(data);
+		// console.log(filteredData);
+		// console.log(data);
 
 		setTimeout(() => {
 			setData(data);
@@ -352,7 +352,7 @@ function index() {
 			setNumSelected([])
 			setUndo(false)
 			setAlert({
-				bgC: '#04ff00',
+				bgC: 'var(--light-green-color)',
 				open: true,
 				message: 'Deleted data gave back'
 			})
@@ -381,7 +381,7 @@ function index() {
 
 		if (ckd) {
 			newData = clonedData.map(el => el.id)
-			console.log(newData);
+			// console.log(newData);
 			setNumSelected(newData)
 		} else {
 			setNumSelected([])
@@ -418,31 +418,31 @@ function index() {
 						undo={undo}
 					/>
 
-					<div className={style.BtnContainer}>
-						<button onClick={viewJsonData} className={style.Submit}>{viewJson ? "Hide" : "View"}</button>
-						<button onClick={returnToInitialData} className={style.Initial}>Initial data</button>
-					</div>
-
-					{/* viewJson */ true &&
-						<div className={style.JsonData}>
-							<div className={style.UpdatedData}>
-								<h5>Updated data</h5>
-								<UpdatedData data={updatedData} />
-							</div>
-							<div className={style.DeletedData}>
-								<h5>Deleted data</h5>
-								<div>
-									<DeletedData data={deletedData} />
-								</div>
-							</div>
-						</div>
-					}
-
 					{filteredData && filteredData.length && filteredData.length > rowsPerPage ?
 						<div className={style.PaginationContainer}>
 							<Pagination activePage={page} handleChangePage={handleChangePage} total={filteredData.length} perPage={rowsPerPage} />
 						</div>
 						: null
+					}
+
+					<div className={style.BtnContainer}>
+						<button onClick={viewJsonData} className={style.Submit}>{viewJson ? "Hide" : "View"}</button>
+						<button onClick={returnToInitialData} className={style.Initial}>Initial data</button>
+					</div>
+
+					{viewJson &&
+						<div className={style.JsonData}>
+							<div className={style.UpdatedData}>
+								<h5>Updated data ({updatedData.length})</h5>
+								<UpdatedData data={updatedData} />
+							</div>
+							<div className={style.DeletedData}>
+								<h5>Deleted data({deletedData.length})</h5>
+								<div>
+									<DeletedData data={deletedData} />
+								</div>
+							</div>
+						</div>
 					}
 
 				</Spinner>

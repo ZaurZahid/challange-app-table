@@ -16,7 +16,7 @@ export const MoreThanEighteenYear = () => {
 
 export const generateArray = () => {
 	const Table = []
-	for (let i = 1; i <= 20/* 150 */; i++) {
+	for (let i = 1; i <= 70/* 150 */; i++) {
 		const Object = { id: i, name: `${i}Zaur`, surname: `${i}Aliyev`, date_birth: "2021-04-14", position: `${i}Frontend developer`, phonenumber: (i > 99 ? `55 ${i} 92 11` : i > 9 ? `55 414 92 ${i}` : `55 4${i}4 92 1${i}`) }
 		Table.push(Object)
 	}
