@@ -184,12 +184,24 @@ input[type='checkbox']:after {
   top: 0;
   outline: 1px solid var(--light-purple-color);
 }
+
 input[type='checkbox']:checked:after {
   background: var(--light-purple-color);
   outline: 1px solid var(--light-purple-color);
   content: '\2714';
   color: #fff;
 }
+
+input[type='checkbox']:disabled {
+  outline: 1px solid var(--scroll-background-color);
+}
+
+input[type='checkbox']:disabled:after {
+  background: var(--scroll-background-color);
+  outline: 1px solid var(--scroll-background-color);
+  color: var(--light-purple-color);
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 3px;

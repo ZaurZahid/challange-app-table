@@ -1,20 +1,34 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Pagination from '../Pagination';
-import SnackBar from '../SnackBar';
+import Pagination from '../../components/Pagination';
+import SnackBar from '../../components/SnackBar';
 import TopSection from '../TopSection';
-import Toolbar from '../Toolbar';
+import Toolbar from '../../components/Toolbar';
 import Table from '../Table';
 import style from './data_sheet.module.css'
 import debounce from 'lodash.debounce';
-import Loading from '../Loading';
-import Spinner from '../Spinner';
+import Loading from '../../components/Loading';
+import Spinner from '../../components/Spinner';
 import UpdatedData from '../UpdatedData';
 import DeletedData from '../DeletedData';
 import { updatedDiff } from 'deep-object-diff';
-import { generateArray } from '../utils';
-import { AiOutlineDeleteRow } from 'react-icons/ai';
+import { generateArray } from '../../components/utils';
 
-function index() {
+/* export const getStaticProps = async () => {
+	const staticTable = generateArray()
+
+	return {
+		props: {
+			table: [
+				{
+					id: 1, name: "ad"
+				}
+			]
+		}, // will be passed to the page component as props
+	}
+} */
+
+function index({ table }) {
+	console.log(table);
 	const [search, setSearch] = useState('')
 	const [numSelected, setNumSelected] = useState([])
 	const [order, setOrder] = useState('asc');
