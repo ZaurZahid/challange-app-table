@@ -9,6 +9,7 @@ import debounce from 'lodash.debounce';
 import Loading from '../Loading';
 import Spinner from '../Spinner';
 import UpdatedData from '../UpdatedData';
+import DeletedData from '../DeletedData';
 import { updatedDiff } from 'deep-object-diff';
 import { generateArray } from '../utils';
 import { AiOutlineDeleteRow } from 'react-icons/ai';
@@ -128,11 +129,15 @@ function index() {
 		}
 	};
 
-	const handleUpdatedData = (index, editingField) => {
+	const handleUpdatedData = (id, editingField) => {
 		const clonedData = [...unChangedData]
+		const oldData = clonedData.find(el => el.id === id)
 		const updatedValues = []
-		const diff = updatedDiff(clonedData[index], editingField)
-		console.log(diff);
+		// console.log(oldData);
+		// console.log(editingField);
+
+		const diff = updatedDiff(oldData, editingField)
+		// console.log(diff);
 
 		if ((Object.keys(diff).length !== 0)) {
 			for (const [key, value] of Object.entries(diff)) {
@@ -140,14 +145,14 @@ function index() {
 					{
 						nameofField: key,
 						valuesOfField: {
-							oldVal: clonedData[index][key],
+							oldVal: oldData[key],
 							newVal: value
 						}
 					}
 				)
 			}
 
-			const withUpdated = { ...clonedData[index], updatedValues }
+			const withUpdated = { ...oldData, updatedValues }
 			const newUpdatedData = [...updatedData, withUpdated]
 			const uniqueData = [...newUpdatedData.reduce((map, obj) => map.set(obj.id, obj), new Map()).values()];
 
@@ -181,7 +186,7 @@ function index() {
 			//API REQUEST
 			setTimeout(() => {
 				//bir bir push ele 
-				handleUpdatedData(index, editingField)
+				handleUpdatedData(id, editingField)
 
 				clonedData[index] = editingField;
 				setData(clonedData);
@@ -287,14 +292,21 @@ function index() {
 		setUndo(true)
 	};
 
-	/* 	const differWithUpdatedData = (deleted, updated) => {
-			const newData = updated.filter((el) => deleted.indexOf(el.id) === -1)
-			console.log(newData);
-	
-			console.log(deleted);
-			console.log(updated);
-		}
-	 */
+	const differWithUpdatedData = (deleted, updated) => {
+		// console.log('deleted');//1
+		// console.log(deleted);//1
+		// console.log('updated');//2
+		// console.log(updated);//3 
+		//updated datanin deletede aid olan idlerinden basqa qalanlari gotur
+
+		const deletedIds = []
+		deleted.map(el => deletedIds.push(el.id))
+
+		const newData = updated.filter((el) => deletedIds.indexOf(el.id) === -1)
+		console.log(newData);
+		setUpdatedData(newData)
+	}
+
 	const onDeletePermanently = () => {
 		// if (confirm("Silmək istədiyinizə əminsinizmi?")) {
 
@@ -304,6 +316,7 @@ function index() {
 
 		setTimeout(() => {
 			const clonedData = [...data]
+			const filteredClonedData = [...data]
 			const newData = clonedData.filter((el) => numSelected.indexOf(el.id) === -1)
 			let newDeletedData = clonedData.filter((el) => numSelected.indexOf(el.id) !== -1)
 
@@ -312,12 +325,12 @@ function index() {
 
 			const newAllDeletedData = [...deletedData, ...newDeletedData]
 			setDeletedData(newAllDeletedData)
-			// differWithUpdatedData(newAllDeletedData, updatedData)
+			differWithUpdatedData(newAllDeletedData, updatedData)
 
 			handleBack()
 			setNumSelected([])
 			setUndo(false)
-
+			setPage(0)
 			setAlert({
 				bgC: '#e0125e',
 				open: true,
@@ -419,7 +432,7 @@ function index() {
 							<div className={style.DeletedData}>
 								<h5>Deleted data</h5>
 								<div>
-									asdasdasd
+									<DeletedData data={deletedData} />
 								</div>
 							</div>
 						</div>

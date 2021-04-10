@@ -154,11 +154,38 @@ button:focus {
 }
 
 input[type='checkbox'] {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
+  outline: 1px solid #ff337e;
+  outline-offset: -1px;
+  position: relative;
+  margin: 0;
 }
 
+input[type='checkbox']:checked {
+  outline: 1px solid #ff337e;
+}
+
+input[type='checkbox']:after {
+  content: '';
+  outline-offset: -1px;
+  vertical-align: middle;
+  text-align: center;
+  position: absolute;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  left: 0;
+  top: 0;
+  outline: 1px solid #ff337e;
+}
+input[type='checkbox']:checked:after {
+  background: #ff337e;
+  outline: 1px solid #ff337e;
+  content: '\2714';
+  color: #fff;
+}
 ::-webkit-scrollbar {
   width: 5px;
   height: 3px;

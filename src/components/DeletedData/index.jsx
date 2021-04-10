@@ -1,5 +1,5 @@
 import React from 'react'
-import { PrettyPrintJson } from '../PrettyPrintJsonUpd';
+import { PrettyPrintJson } from '../PrettyPrintJsonDel';
 
 function index({ data }) {
 	return (
