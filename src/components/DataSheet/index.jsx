@@ -259,6 +259,7 @@ function index() {
 		setDeletedData([])
 		setNumSelected([])
 		setPage(0)
+
 		fetchData()
 
 		setAlert({
@@ -269,7 +270,7 @@ function index() {
 	}
 
 	const handleDeleteTemporary = () => {
-		let clonedData = [...unChangedData]
+		let clonedData = [...data]
 		let numSelectedAll = [...numSelected]
 
 		if (deletedData && deletedData.length > 0) {
@@ -284,17 +285,16 @@ function index() {
 		setIsLoading(true)
 		handleBack()
 		setUndo(true)
-
 	};
 
-/* 	const differWithUpdatedData = (deleted, updated) => {
-		const newData = updated.filter((el) => deleted.indexOf(el.id) === -1)
-		console.log(newData);
-
-		console.log(deleted);
-		console.log(updated);
-	}
- */
+	/* 	const differWithUpdatedData = (deleted, updated) => {
+			const newData = updated.filter((el) => deleted.indexOf(el.id) === -1)
+			console.log(newData);
+	
+			console.log(deleted);
+			console.log(updated);
+		}
+	 */
 	const onDeletePermanently = () => {
 		// if (confirm("Silmək istədiyinizə əminsinizmi?")) {
 
@@ -312,7 +312,7 @@ function index() {
 
 			const newAllDeletedData = [...deletedData, ...newDeletedData]
 			setDeletedData(newAllDeletedData)
-			differWithUpdatedData(newAllDeletedData, updatedData)
+			// differWithUpdatedData(newAllDeletedData, updatedData)
 
 			handleBack()
 			setNumSelected([])
@@ -330,7 +330,22 @@ function index() {
 	// };
 
 	const unDo = () => {
+		console.log(filteredData);
+		console.log(data);
 
+		setTimeout(() => {
+			setData(data);
+			setFilteredData(data);
+			setNumSelected([])
+			setUndo(false)
+			setAlert({
+				bgC: '#04ff00',
+				open: true,
+				message: 'Deleted data gave back'
+			})
+			setIsLoading(false)
+
+		}, 500);
 	};
 
 	const selectClick = (ckd, id) => {
